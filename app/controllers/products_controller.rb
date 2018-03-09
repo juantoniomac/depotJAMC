@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  include ActionController::Live
   before_action :set_product, only: [:show, :edit, :update, :destroy]
 
   # GET /products
@@ -62,6 +63,31 @@ class ProductsController < ApplicationController
       format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def who_bought
+    @product = Product.find(params[:id])
+    @latest_order = @product.orders.order(:updated_at).last
+    if stale?(@latest_order)
+      respond_to do |format|
+        format.html
+        format.xml
+        format.atom
+        format.json { render json: @product.to_json(include: :orders) }
+      end
+    end
+  end
+
+
+  def download
+    response.header['Content-Type'] = 'text/plain'
+    40.times do |i|
+      response.stream.write "Line #{i}\n\n"
+      sleep 0.10
+    end
+    response.tream.write "Fini.\n"
+  ensure
+    response.stream.close
   end
 
   private
