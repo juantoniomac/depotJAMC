@@ -1,9 +1,8 @@
 
 <div class="depot_form">
   <fieldset>
-    <legend>Please Enter Your Details</legend>
+    <legend><%= t('.legend') %></legend>
     <%= render 'form', order: @order %>
   </fieldset>
 </div>
 
-<%= javascript_pack_tag("pay_type") %>
