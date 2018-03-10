@@ -34,4 +34,5 @@
 /node_modules
 /yarn-error.log
  
-.byebug_history
+.byebug_history/public/packs
+/node_modules
